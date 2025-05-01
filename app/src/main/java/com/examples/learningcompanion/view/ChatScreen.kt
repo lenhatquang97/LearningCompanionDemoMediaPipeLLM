@@ -49,7 +49,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.examples.learningcompanion.model.ChatMessageModel
 import com.examples.learningcompanion.viewmodel.ChatViewModel
-import com.examples.learningcompanion.singleton.InferenceSingleton
 import com.examples.learningcompanion.R
 import com.examples.learningcompanion.viewstate.ChatUiState
 
@@ -64,8 +63,7 @@ internal fun ChatRoute(
 
     // Reset InferenceModel when entering ChatScreen
     LaunchedEffect(Unit) {
-        val inferenceModel = InferenceSingleton.Companion.getInstance(context)
-        chatViewModel.resetInferenceModel(inferenceModel)
+        chatViewModel.onEnterChatScreen(context)
     }
 
     ChatScreen(
@@ -103,7 +101,7 @@ fun ChatScreen(
         ) {
             Column {
                 Text(
-                    text = InferenceSingleton.Companion.llmModel.toString(),
+                    text = chatViewModel.llmModelName(),
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
@@ -115,9 +113,7 @@ fun ChatScreen(
             Row {
                 IconButton(
                     onClick = {
-                        InferenceSingleton.Companion.getInstance(context).resetSession()
-                        uiState.clearMessages()
-                        chatViewModel.recomputeSizeInTokens("")
+                       chatViewModel.onClickClearChat(context)
                     },
                     enabled = textInputEnabled
                 ) {
@@ -126,9 +122,7 @@ fun ChatScreen(
 
                 IconButton(
                     onClick = {
-                        InferenceSingleton.Companion.getInstance(context).close()
-                        uiState.clearMessages()
-                        chatViewModel.recomputeSizeInTokens("")
+                        chatViewModel.onClickCloseChatIcon(context)
                         onClose()
                     },
                     enabled = textInputEnabled
@@ -180,11 +174,10 @@ fun ChatScreen(
 
             TextField(
                 value = userMessage,
-                onValueChange = { userMessage = it
+                onValueChange = {
                     // Only recompute on first word or when we get a new word
-                    if (!userMessage.contains(" ") || userMessage.trim() != userMessage)  {
-                        chatViewModel.recomputeSizeInTokens(userMessage)
-                    }
+                    userMessage = it
+                    chatViewModel.onTokenChange(userMessage)
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
@@ -195,9 +188,7 @@ fun ChatScreen(
                 modifier = Modifier
                     .weight(0.85f)
                     .onFocusChanged { focusState ->
-                        if (focusState.isFocused) {
-                            chatViewModel.recomputeSizeInTokens(userMessage)
-                        }
+                        chatViewModel.onFocusChanged(focusState, userMessage)
                     },
                 enabled = textInputEnabled
             )

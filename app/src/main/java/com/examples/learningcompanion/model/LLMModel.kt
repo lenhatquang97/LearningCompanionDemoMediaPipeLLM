@@ -12,6 +12,7 @@ enum class LLMModel(
     val topK: Int,
     val topP: Float,
 ) {
+    NONE(path = "", url = "", fileName = "", preferredBackend = LlmInference.Backend.DEFAULT, thinking = false, temperature = 0.0f, topK = 0, topP = 0f),
     GEMMA3_1B_IT_CPU(
         path = "/data/local/tmp/Gemma3-1B-IT_multi-prefill-seq_q8_ekv2048.task",
         url = "https://www.dropbox.com/scl/fi/mky83xnln8lr2ub3a38t3/Gemma3-1B-IT_multi-prefill-seq_q8_ekv2048.task?rlkey=kdoaltng60a4r0gqxjt5cqhvg&st=ztaa63zk&dl=1",
