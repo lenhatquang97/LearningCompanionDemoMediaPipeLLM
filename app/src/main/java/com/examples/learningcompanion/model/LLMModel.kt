@@ -22,7 +22,7 @@ enum class LLMModel(
         topK = 64,
         topP = 0.95f
     ),
-    GEMMA_3_1B_IT_GPU(
+    GEMMA3_1B_IT_GPU(
         path = "/data/local/tmp/Gemma3-1B-IT_multi-prefill-seq_q8_ekv2048.task",
         url = "https://www.dropbox.com/scl/fi/mky83xnln8lr2ub3a38t3/Gemma3-1B-IT_multi-prefill-seq_q8_ekv2048.task?rlkey=kdoaltng60a4r0gqxjt5cqhvg&st=ztaa63zk&dl=1",
         fileName = "Gemma3-1B-IT_multi-prefill-seq_q8_ekv2048.task",

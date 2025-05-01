@@ -86,7 +86,7 @@ class InferenceSingleton private constructor(context: Context) {
     }
 
     companion object {
-        var llmModel: LLMModel = LLMModel.GEMMA_3_1B_IT_GPU
+        var llmModel: LLMModel = LLMModel.GEMMA3_1B_IT_GPU
         private var instance: InferenceSingleton? = null
 
         fun getInstance(context: Context): InferenceSingleton {
